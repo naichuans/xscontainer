@@ -1,9 +1,18 @@
 #!/usr/bin/env python
 
+from signal import signal, SIGPIPE
+
 import xscontainer.docker_monitor as docker_monitor
+from xscontainer.util import log
 
 
+void sig_handler(int signo)
+{
+    if (signo == SIGPIPE)
+        log.error("IOError, SIGPIPE received")
+}
 def main():
+    signal(SIGPIPE, sig_handler);
     docker_monitor.monitor_host()
 
 
